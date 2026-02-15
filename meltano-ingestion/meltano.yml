@@ -1,0 +1,76 @@
+version: 1
+default_environment: dev
+
+environments:
+- name: dev
+  config:
+    plugins:
+      loaders:
+      - name: target-bigquery
+        config:
+          project: project-dsai-2025-11-12
+          dataset: olist_raw
+          location: US
+- name: staging
+- name: prod
+
+project_id: olist_pipeline
+
+plugins:
+  extractors:
+  - name: tap-csv
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-csv.git
+    config:
+      files:
+      - entity: olist_customers
+        path: ../data/olist_customers_dataset.csv
+        keys: [customer_id]
+      - entity: olist_geolocation
+        path: ../data/olist_geolocation_dataset_pipe.csv
+        delimiter: '|'
+        keys: [geolocation_zip_code_prefix]
+      - entity: olist_order_items
+        path: ../data/olist_order_items_dataset.csv
+        keys: [order_id, order_item_id]
+      - entity: olist_order_payments
+        path: ../data/olist_order_payments_dataset.csv
+        keys: [order_id]
+      - entity: olist_order_reviews
+        path: ../data/olist_order_reviews_dataset.csv
+        keys: [review_id]
+      - entity: olist_orders
+        path: ../data/olist_orders_dataset.csv
+        keys: [order_id]
+      - entity: olist_products
+        path: ../data/olist_products_dataset.csv
+        keys: [product_id]
+      - entity: olist_sellers
+        path: ../data/olist_sellers_dataset.csv
+        keys: [seller_id]
+      - entity: olist_category_name_translation
+        path: ../data/product_category_name_translation.csv
+        keys: [product_category_name]
+  - name: tap-duckdb
+    variant: meltanolabs
+    pip_url: git+https://github.com/MeltanoLabs/tap-duckdb.git
+    config:
+      path: /home/taufiqidris/olist_datascience/duckdb/olist_stage.duckdb
+  loaders:
+  - name: target-bigquery
+    variant: z3z1ma
+    pip_url: git+https://github.com/z3z1ma/target-bigquery.git
+    config:
+      project: project-dsai-2025-11-12
+      dataset: olist_raw
+      write_disposition: WRITE_TRUNCATE
+      location: US
+      default_target_schema: olist_raw
+      max_buffer_size: 2000
+      max_retries: 5
+      timeout_seconds: 600
+  - name: target-duckdb
+    variant: jwills
+    pip_url: target-duckdb~=0.8
+    config:
+      path: /home/taufiqidris/olist_datascience/duckdb/olist_stage.duckdb

@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: olist_raw
+    database: project-dsai-2025-11-12
+    schema: olist_raw
+    tables:
+      - name: olist_orders
+      - name: olist_customers
+      - name: olist_order_items

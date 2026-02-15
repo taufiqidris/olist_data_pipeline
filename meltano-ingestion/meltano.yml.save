@@ -1,0 +1,42 @@
+version: 1
+default_environment: dev
+
+environments:
+- name: dev
+- name: staging
+- name: prod
+
+project_id: olist_pipeline
+- name: tap-duckdb
+  variant: meltanolabs
+  pip_url: git+https://github.com/MeltanoLabs/tap-duckdb.git
+  config:
+    path: /home/taufiqidris/olist_datascience/olist_data.db
+
+plugins:
+  extractors:
+  - name: tap-duckdb
+    pip_url: singer-tap-duckdb
+    config:
+      filepath: /home/taufiqidris/olist_datascience/olist_data.db
+  loaders:
+  - name: target-bigquery
+    variant: z3z1ma
+    pip_url: git+https://github.com/z3z1ma/target-bigquery.git
+    config:
+      project: project-dsai-2025-11-12
+      dataset: olist_raw
+      write_disposition: WRITE_TRUNCATE
+      location: US
+      default_target_schema: olist_raw
+      max_buffer_size: 2000
+      max_retries: 5
+      timeout_seconds: 600
+^X
+
+^T^Z
+
+X^X^X
+
+
+
