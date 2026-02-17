@@ -10,7 +10,7 @@ using production-style data modelling, testing, and validation.
 - **Period:** 2016–2018
 - **Size:** ~100k orders, ~99k customers, ~33k products
 - **Granularity:** Order-level transactional data
-- 
+  
 ## Architecture
 
 ```mermaid
