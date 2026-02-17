@@ -1,0 +1,90 @@
+version: 2
+
+models:
+  - name: dim_customers
+    description: "Current customer dimension (SCD2) built from snap_olist_customers."
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+      - name: customer_unique_id
+        tests: [not_null]
+
+  - name: dim_products
+    description: "Current product dimension (SCD2) built from snap_olist_products."
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: dim_sellers
+    description: "Current sellers dimension (from staging)."
+    columns:
+      - name: seller_id
+        tests: [not_null, unique]
+
+  - name: dim_geolocation
+    description: "Geolocation dimension aggregated to one row per zip prefix."
+    columns:
+      - name: geolocation_zip_code_prefix
+        tests: [not_null, unique]
+
+  - name: fct_orders
+    description: "Orders fact table at order grain (1 row per order)."
+    columns:
+      - name: order_id
+        tests: [not_null, unique]
+      - name: customer_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_customers')
+              field: customer_id
+
+  - name: fct_order_items
+    description: "Order items fact table at order-item grain (order_id + order_item_id)."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id
+      - name: order_item_id
+        tests: [not_null]
+      - name: product_id
+        tests:
+          - relationships:
+              to: ref('dim_products')
+              field: product_id
+      - name: seller_id
+        tests:
+          - relationships:
+              to: ref('dim_sellers')
+              field: seller_id
+
+  - name: fct_payments
+    description: "Payments fact table at payment-event grain (order_id + payment_sequential)."
+    columns:
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id
+      - name: payment_sequential
+        tests: [not_null]
+      - name: payment_value
+        tests: [not_null]
+
+  - name: fct_reviews
+    description: "Reviews fact table at review grain."
+    columns:
+      - name: review_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests:
+          - not_null
+          - relationships:
+              to: ref('fct_orders')
+              field: order_id
+      - name: review_score
+        tests: [not_null]

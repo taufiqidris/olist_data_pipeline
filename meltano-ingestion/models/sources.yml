@@ -5,6 +5,12 @@ sources:
     database: project-dsai-2025-11-12
     schema: olist_raw
     tables:
-      - name: olist_orders
-      - name: olist_customers
-      - name: olist_order_items
+      - name: tap_csv_olist_orders
+      - name: tap_csv_olist_order_items
+      - name: tap_csv_olist_order_payments
+      - name: tap_csv_olist_order_reviews
+      - name: tap_csv_olist_customers
+      - name: tap_csv_olist_products
+      - name: tap_csv_olist_sellers
+      - name: tap_csv_olist_geolocation
+      - name: tap_csv_olist_category_name_translation

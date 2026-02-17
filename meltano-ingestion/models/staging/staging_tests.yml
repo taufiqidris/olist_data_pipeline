@@ -1,0 +1,39 @@
+version: 2
+
+models:
+  - name: stg_olist_customers
+    columns:
+      - name: customer_id
+        tests: [not_null, unique]
+
+  - name: stg_olist_products
+    columns:
+      - name: product_id
+        tests: [not_null, unique]
+
+  - name: stg_olist_sellers
+    columns:
+      - name: seller_id
+        tests: [not_null, unique]
+
+  - name: stg_olist_order_reviews
+    columns:
+      - name: review_id
+        tests: [not_null, unique]
+      - name: order_id
+        tests:
+          - not_null
+
+  - name: stg_olist_order_items
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: order_item_id
+        tests: [not_null]
+
+  - name: stg_olist_order_payments
+    columns:
+      - name: order_id
+        tests: [not_null]
+      - name: payment_sequential
+        tests: [not_null]

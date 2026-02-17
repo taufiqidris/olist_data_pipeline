@@ -1,2 +1,7 @@
-name: 'olist'
+name: 'meltano_ingestion'
+version: '1.0.0'
+config-version: 2
+
 profile: 'olist'
+
+model-paths: ["models"]

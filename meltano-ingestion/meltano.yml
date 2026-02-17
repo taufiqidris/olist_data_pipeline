@@ -65,7 +65,6 @@ plugins:
       dataset: olist_raw
       write_disposition: WRITE_TRUNCATE
       location: US
-      default_target_schema: olist_raw
       max_buffer_size: 2000
       max_retries: 5
       timeout_seconds: 600
