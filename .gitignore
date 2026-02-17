@@ -208,3 +208,7 @@ __marimo__/
 
 # Secrets
 keys/*.json
+
+# Local data artifacts
+*.duckdb
+data/olist_geolocation_dataset*.csv
